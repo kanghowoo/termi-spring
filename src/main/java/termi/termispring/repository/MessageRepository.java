@@ -7,5 +7,6 @@ import java.util.List;
 public interface MessageRepository {
 
     Message send(Message message);
-    List<Message> findAll();
+    List<Message> getMessages();
+    Message getMessageById(Long id);
 }

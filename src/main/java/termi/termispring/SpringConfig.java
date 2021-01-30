@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import termi.termispring.repository.JdbcTemplateMessageRepository;
 import termi.termispring.repository.MessageRepository;
-import termi.termispring.service.MessageService;
+import termi.termispring.service.MessageServiceImpl;
 
 import javax.sql.DataSource;
 
@@ -17,8 +17,8 @@ public class SpringConfig {
     }
 
     @Bean
-    public MessageService messageService() {
-        return new MessageService(messageRepository());
+    public MessageServiceImpl messageService() {
+        return new MessageServiceImpl(messageRepository());
     }
 
     @Bean

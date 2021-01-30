@@ -1,15 +1,14 @@
-package termi.termispring.domain;
+package termi.termispring.dto;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
-public class Message {
-
+public class MessageForm {
     private Long id;
     private Long senderId;
     private Long receiverId;
-    private Timestamp sendTime;
+    private String senderName;
+    private String receiverName;
     private String content;
 
     public Long getId() {
@@ -36,12 +35,20 @@ public class Message {
         this.receiverId = receiverId;
     }
 
-    public Timestamp getSendTime() {
-        return sendTime;
+    public String getSenderName() {
+        return senderName;
     }
 
-    public void setSendTime(Timestamp sendTime) {
-        this.sendTime = sendTime;
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
     public String getContent() {

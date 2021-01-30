@@ -1,10 +1,10 @@
 package termi.termispring.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import termi.termispring.domain.Message;
+import termi.termispring.dto.MessageForm;
 import termi.termispring.service.MessageService;
 
 import java.sql.Timestamp;
@@ -23,24 +23,29 @@ public class MessageController {
 
 
     @PostMapping(value = "/message")
-//    @ResponseBody
-    public Message send(@RequestBody MessageForm form) {
+    public Message sendMessage(@RequestBody MessageForm form) {
         Message message = new Message();
-        message.setMsg_sender(form.getMsg_sender());
-        message.setMsg_receiver(form.getMsg_receiver());
-        message.setMsg_content(form.getMsg_content());
-        message.setMsg_send_time(Timestamp.valueOf(LocalDateTime.now()));
+        message.setSenderId(form.getSenderId());
+        message.setReceiverId(form.getReceiverId());
+        message.setContent(form.getContent());
+        message.setSendTime(Timestamp.valueOf(LocalDateTime.now()));
 
-        messageService.send(message);
+        messageService.sendMessage(message);
         return message;
     }
 
-    @GetMapping(value = "/message")
-    public List list(Model model) {
-        List<Message> messageList = messageService.findMessages();
+    @GetMapping(value = "/messages")
+    public List getMessages(Model model) {
+        List<Message> messageList = messageService.getMessages();
         model.addAttribute("message",messageList);
 
         return messageList;
     }
 
+    @GetMapping(value = "/message")
+    public Message getMessageById(@RequestParam Long id) {
+        Message message = new Message();
+        message = messageService.getMessageById(id);
+        return message;
+    }
 }

@@ -26,32 +26,39 @@ public class JdbcTemplateMessageRepository implements MessageRepository{
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("message").usingGeneratedKeyColumns("msg_id");
         Map<String,Object> parameters = new HashMap<>();
-        parameters.put("msg_sender",message.getMsg_sender());
-        parameters.put("msg_receiver",message.getMsg_receiver());
-        parameters.put("msg_content", message.getMsg_content());
-        parameters.put("msg_send_time", message.getMsg_send_time());
+        parameters.put("msg_sender_id",message.getSenderId());
+        parameters.put("msg_receiver_id",message.getReceiverId());
+        parameters.put("msg_content", message.getContent());
+        parameters.put("msg_send_time", message.getSendTime());
         Number key = jdbcInsert.executeAndReturnKey(new
                 MapSqlParameterSource(parameters));
-        message.setMsg_id(key.longValue());
+        message.setId(key.longValue());
 
         return message;
     }
 
     @Override
-    public List<Message> findAll() {
+    public List<Message> getMessages() {
         return jdbcTemplate.query("select * from message", messageRowMapper());
+    }
+
+    @Override
+    public Message getMessageById(Long id) {
+        return jdbcTemplate.queryForObject("select * from message where msg_receiver_id =?",messageRowMapper(),id);
     }
 
     private RowMapper<Message> messageRowMapper() {
         return (rs, rowNum) -> {
 
             Message message = new Message();
-            message.setMsg_id(rs.getLong("msg_id"));
-            message.setMsg_sender(rs.getString("msg_sender"));
-            message.setMsg_receiver(rs.getString("msg_receiver"));
-            message.setMsg_content(rs.getString("msg_content"));
-            message.setMsg_send_time(rs.getTimestamp("msg_send_time"));
+            message.setId(rs.getLong("msg_id"));
+            message.setSenderId(rs.getLong("msg_sender_id"));
+            message.setReceiverId(rs.getLong("msg_receiver_id"));
+            message.setContent(rs.getString("msg_content"));
+            message.setSendTime(rs.getTimestamp("msg_send_time"));
             return message;
         };
     }
+
+
 }
