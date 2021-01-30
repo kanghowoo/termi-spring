@@ -35,17 +35,17 @@ public class MessageController {
     }
 
     @GetMapping(value = "/messages")
-    public List getMessages(Model model) {
-        List<Message> messageList = messageService.getMessages();
-        model.addAttribute("message",messageList);
+    public List getMessages(@RequestParam Long id) {
+        List<MessageForm> messageList = messageService.getMessages(id);
+//        model.addAttribute("message",messageList);
 
         return messageList;
     }
 
     @GetMapping(value = "/message")
-    public Message getMessageById(@RequestParam Long id) {
-        Message message = new Message();
-        message = messageService.getMessageById(id);
-        return message;
+    public MessageForm getMessageById(@RequestParam Long id) {
+        MessageForm form = new MessageForm();
+        form = messageService.getMessageById(id);
+        return form;
     }
 }

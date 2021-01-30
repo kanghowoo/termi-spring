@@ -8,6 +8,6 @@ import java.util.List;
 public interface MessageService {
 
     void sendMessage(Message message);
-    List<Message> getMessages();
-    Message getMessageById(Long id);
+    List<MessageForm> getMessages(Long id);
+    MessageForm getMessageById(Long id);
 }

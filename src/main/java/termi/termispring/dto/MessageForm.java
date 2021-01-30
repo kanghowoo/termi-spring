@@ -1,5 +1,6 @@
 package termi.termispring.dto;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -10,6 +11,7 @@ public class MessageForm {
     private String senderName;
     private String receiverName;
     private String content;
+    private Timestamp sendTime;
 
     public Long getId() {
         return id;
@@ -57,5 +59,13 @@ public class MessageForm {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Timestamp getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Timestamp sendTime) {
+        this.sendTime = sendTime;
     }
 }

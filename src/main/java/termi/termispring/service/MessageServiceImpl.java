@@ -2,8 +2,8 @@ package termi.termispring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import termi.termispring.domain.Message;
+import termi.termispring.dto.MessageForm;
 import termi.termispring.repository.MessageRepository;
 
 import java.util.List;
@@ -23,12 +23,12 @@ public class MessageServiceImpl implements MessageService{
     }
 
     @Override
-    public List<Message> getMessages() {
-        return messageRepository.getMessages();
+    public List<MessageForm> getMessages(Long id) {
+        return messageRepository.getMessages(id);
     }
 
     @Override
-    public Message getMessageById(Long id) {
+    public MessageForm getMessageById(Long id) {
         return messageRepository.getMessageById(id);
     }
 

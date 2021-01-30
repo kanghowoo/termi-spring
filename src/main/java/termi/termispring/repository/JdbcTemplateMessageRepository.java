@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import termi.termispring.domain.Message;
+import termi.termispring.dto.MessageForm;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -38,27 +39,37 @@ public class JdbcTemplateMessageRepository implements MessageRepository{
     }
 
     @Override
-    public List<Message> getMessages() {
-        return jdbcTemplate.query("select * from message", messageRowMapper());
+    public List<MessageForm> getMessages(Long id) {
+        return jdbcTemplate.query("select msg_id,msg_receiver_id,msg_sender_id,msg_content,msg_send_time,"+
+                "r.user_name as receiverName,s.user_name as senderName " +
+                "from message m " +
+                "left join user r on m.msg_receiver_id = r.user_id " +
+                "left join user s on m.msg_sender_id = s.user_id " +
+                "where r.user_id = ?", getMessageMapper(),id);
     }
 
     @Override
-    public Message getMessageById(Long id) {
-        return jdbcTemplate.queryForObject("select * from message where msg_receiver_id =?",messageRowMapper(),id);
+    public MessageForm getMessageById(Long id) {
+        return jdbcTemplate.queryForObject("select msg_id,msg_receiver_id,msg_sender_id,msg_content,msg_send_time," +
+                "r.user_name as receiverName,s.user_name as senderName " +
+                "from message m " +
+                "left join user r on m.msg_receiver_id = r.user_id " +
+                "left join user s on m.msg_sender_id = s.user_id " +
+                "where msg_id = ?",getMessageMapper(),id);
     }
 
-    private RowMapper<Message> messageRowMapper() {
+    private RowMapper<MessageForm> getMessageMapper() {
         return (rs, rowNum) -> {
 
-            Message message = new Message();
-            message.setId(rs.getLong("msg_id"));
-            message.setSenderId(rs.getLong("msg_sender_id"));
-            message.setReceiverId(rs.getLong("msg_receiver_id"));
-            message.setContent(rs.getString("msg_content"));
-            message.setSendTime(rs.getTimestamp("msg_send_time"));
-            return message;
+            MessageForm form = new MessageForm();
+            form.setId(rs.getLong("msg_id"));
+            form.setSenderId(rs.getLong("msg_sender_id"));
+            form.setReceiverId(rs.getLong("msg_receiver_id"));
+            form.setSenderName(rs.getString("senderName"));
+            form.setReceiverName(rs.getString("receiverName"));
+            form.setContent(rs.getString("msg_content"));
+            form.setSendTime(rs.getTimestamp("msg_send_time"));
+            return form;
         };
     }
-
-
 }
