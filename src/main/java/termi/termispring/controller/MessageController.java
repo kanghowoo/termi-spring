@@ -1,51 +1,46 @@
 package termi.termispring.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import termi.termispring.domain.Message;
-import termi.termispring.dto.MessageForm;
+import termi.termispring.dto.MessageCreateRequest;
+import termi.termispring.dto.MessageResponse;
+import termi.termispring.mapper.MessageMapper;
 import termi.termispring.service.MessageService;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 public class MessageController {
 
     private final MessageService messageService;
+    private final MessageMapper messageMapper;
 
     @Autowired
-    public MessageController(MessageService messageService) {
+    public MessageController(MessageService messageService,MessageMapper messageMapper) {
         this.messageService = messageService;
+        this.messageMapper = messageMapper;
     }
 
 
-    @PostMapping(value = "/message")
-    public Message sendMessage(@RequestBody MessageForm form) {
-        Message message = new Message();
-        message.setSenderId(form.getSenderId());
-        message.setReceiverId(form.getReceiverId());
-        message.setContent(form.getContent());
-        message.setSendTime(Timestamp.valueOf(LocalDateTime.now()));
-
+    @PostMapping(value = "/messages")
+    public Message sendMessage(@RequestBody MessageCreateRequest request) {
+        Message message = messageMapper.requestToMessage(request);
         messageService.sendMessage(message);
         return message;
     }
 
-    @GetMapping(value = "/messages")
-    public List getMessages(@RequestParam Long id) {
-        List<MessageForm> messageList = messageService.getMessages(id);
+    @GetMapping(value = "/users/{userId}/messages")
+    public List getMessagesByUserId(@PathVariable Long userId) {
+        List<Message> messageList = messageService.getMessagesByUserId(userId);
 //        model.addAttribute("message",messageList);
-
         return messageList;
     }
 
-    @GetMapping(value = "/message")
-    public MessageForm getMessageById(@RequestParam Long id) {
-        MessageForm form = new MessageForm();
-        form = messageService.getMessageById(id);
-        return form;
+    @GetMapping(value = "/messages/{messageId}")
+    public MessageResponse getMessageByMessageId(@PathVariable Long messageId) {
+        Message message = messageService.getMessageByMessageId(messageId);
+        MessageResponse response = messageMapper.messageToResponse(message);
+        return response;
     }
 }
