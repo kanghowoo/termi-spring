@@ -2,7 +2,9 @@ package termi.termispring;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import termi.termispring.repository.JdbcTemplateMemberRepository;
 import termi.termispring.repository.JdbcTemplateMessageRepository;
+import termi.termispring.repository.MemberRepository;
 import termi.termispring.repository.MessageRepository;
 import termi.termispring.service.MessageServiceImpl;
 
@@ -24,6 +26,11 @@ public class SpringConfig {
     @Bean
     public MessageRepository messageRepository() {
         return new JdbcTemplateMessageRepository(dataSource);
+    }
+
+    @Bean
+    public MemberRepository memberRepository() {
+        return new JdbcTemplateMemberRepository(dataSource);
     }
 
 }

@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import termi.termispring.domain.Message;
-import termi.termispring.domain.User;
+import termi.termispring.dto.MemberResponse;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -23,38 +23,37 @@ public class JdbcTemplateMessageRepository implements MessageRepository{
     }
 
     @Override
-    public Message send(Message message) {
+    public void sendMessage(Message message) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("message").usingGeneratedKeyColumns("msg_id");
         Map<String,Object> parameters = new HashMap<>();
-        parameters.put("msg_sender_id",message.getSender().getUser_id());
-        parameters.put("msg_receiver_id",message.getReceiver().getUser_id());
+        parameters.put("msg_sender_id",message.getSender().getId());
+        parameters.put("msg_receiver_id",message.getReceiver().getId());
         parameters.put("msg_content", message.getContent());
         parameters.put("msg_send_time", message.getSendTime());
         Number key = jdbcInsert.executeAndReturnKey(new
                 MapSqlParameterSource(parameters));
         message.setId(key.longValue());
 
-        return message;
     }
 
     @Override
-    public List<Message> getMessagesByUserId(Long userId) {
+    public List<Message> getMessagesByUserId(Long memberId) {
         return jdbcTemplate.query("select msg_id,msg_receiver_id,msg_sender_id,msg_content,msg_send_time,"+
-                "r.user_name as receiverName,s.user_name as senderName " +
+                "r.mem_name as receiverName,s.mem_name as senderName " +
                 "from message m " +
-                "left join user r on m.msg_receiver_id = r.user_id " +
-                "left join user s on m.msg_sender_id = s.user_id " +
-                "where r.user_id = ?", getMessageMapper(),userId);
+                "left join member r on m.msg_receiver_id = r.mem_id " +
+                "left join member s on m.msg_sender_id = s.mem_id " +
+                "where r.mem_id = ?", getMessageMapper(),memberId);
     }
 
     @Override
     public Message getMessageByMessageId(Long messageId) {
         return jdbcTemplate.queryForObject("select msg_id,msg_receiver_id,msg_sender_id,msg_content,msg_send_time," +
-                "r.user_name as receiverName,s.user_name as senderName " +
+                "r.mem_name as receiverName,s.mem_name as senderName " +
                 "from message m " +
-                "left join user r on m.msg_receiver_id = r.user_id " +
-                "left join user s on m.msg_sender_id = s.user_id " +
+                "left join member r on m.msg_receiver_id = r.mem_id " +
+                "left join member s on m.msg_sender_id = s.mem_id " +
                 "where msg_id = ?",getMessageMapper(),messageId);
     }
 
@@ -62,15 +61,15 @@ public class JdbcTemplateMessageRepository implements MessageRepository{
         return (rs, rowNum) -> {
 
             Message message = new Message();
-            User sender = new User();
-            User receiver = new User();
+            MemberResponse sender = new MemberResponse();
+            MemberResponse receiver = new MemberResponse();
 
             message.setId(rs.getLong("msg_id"));
-            sender.setUser_id(rs.getLong("msg_sender_id"));
-            sender.setUser_name(rs.getString("senderName"));
+            sender.setId(rs.getLong("msg_sender_id"));
+            sender.setName(rs.getString("senderName"));
 
-            receiver.setUser_id(rs.getLong("msg_receiver_id"));
-            receiver.setUser_name(rs.getString("receiverName"));
+            receiver.setId(rs.getLong("msg_receiver_id"));
+            receiver.setName(rs.getString("receiverName"));
 
             message.setSender(sender);
             message.setReceiver(receiver);

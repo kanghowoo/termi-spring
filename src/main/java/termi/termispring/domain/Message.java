@@ -1,14 +1,14 @@
 package termi.termispring.domain;
 
-import java.sql.Time;
+import termi.termispring.dto.MemberResponse;
+
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 public class Message {
 
     private Long id;
-    private User sender;
-    private User receiver;
+    private MemberResponse sender;
+    private MemberResponse receiver;
     private Timestamp sendTime;
     private String content;
 
@@ -36,19 +36,19 @@ public class Message {
         this.content = content;
     }
 
-    public User getSender() {
+    public MemberResponse getSender() {
         return sender;
     }
 
-    public void setSender(User sender) {
+    public void setSender(MemberResponse sender) {
         this.sender = sender;
     }
 
-    public User getReceiver() {
+    public MemberResponse getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(User receiver) {
+    public void setReceiver(MemberResponse receiver) {
         this.receiver = receiver;
     }
 }

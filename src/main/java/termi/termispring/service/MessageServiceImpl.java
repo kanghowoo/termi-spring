@@ -21,7 +21,7 @@ public class MessageServiceImpl implements MessageService {
 
     public void sendMessage(Message message) {
         message.setSendTime(Timestamp.valueOf(LocalDateTime.now()));
-        messageRepository.send(message);
+        messageRepository.sendMessage(message);
     }
 
     @Override

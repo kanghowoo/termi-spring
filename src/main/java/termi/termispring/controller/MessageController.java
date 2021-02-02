@@ -24,15 +24,15 @@ public class MessageController {
 
 
     @PostMapping(value = "/messages")
-    public Message sendMessage(@RequestBody MessageCreateRequest request) {
+    public MessageCreateRequest sendMessage(@RequestBody MessageCreateRequest request) {
         Message message = messageMapper.requestToMessage(request);
         messageService.sendMessage(message);
-        return message;
+        return request;
     }
 
-    @GetMapping(value = "/users/{userId}/messages")
-    public List getMessagesByUserId(@PathVariable Long userId) {
-        List<Message> messageList = messageService.getMessagesByUserId(userId);
+    @GetMapping(value = "/users/{memberId}/messages")
+    public List getMessagesByUserId(@PathVariable Long memberId) {
+        List<Message> messageList = messageService.getMessagesByUserId(memberId);
 //        model.addAttribute("message",messageList);
         return messageList;
     }
