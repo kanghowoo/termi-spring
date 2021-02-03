@@ -5,8 +5,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import termi.termispring.domain.Member;
 import termi.termispring.domain.Message;
-import termi.termispring.dto.MemberResponse;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -61,8 +61,8 @@ public class JdbcTemplateMessageRepository implements MessageRepository{
         return (rs, rowNum) -> {
 
             Message message = new Message();
-            MemberResponse sender = new MemberResponse();
-            MemberResponse receiver = new MemberResponse();
+            Member sender = new Member();
+            Member receiver = new Member();
 
             message.setId(rs.getLong("msg_id"));
             sender.setId(rs.getLong("msg_sender_id"));

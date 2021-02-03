@@ -9,6 +9,9 @@ import termi.termispring.dto.MemberCreateRequest;
 import termi.termispring.mapper.MemberMapper;
 import termi.termispring.service.MemberService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class MemberController {
 
@@ -22,10 +25,12 @@ public class MemberController {
     }
 
     @PostMapping(value="/members")
-    public String createMember(@RequestBody MemberCreateRequest request) {
+    public Map<String,String> createMember(@RequestBody MemberCreateRequest request) {
         Member member = memberMapper.requestToMember(request);
         memberService.createMember(member);
 
-        return request.getName() + " 님 회원가입이 완료 되었습니다.";
+        Map result = new HashMap<String, String>();
+        result.put("ok", request.getName());
+        return result;
     }
 }

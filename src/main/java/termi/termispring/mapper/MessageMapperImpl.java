@@ -1,6 +1,7 @@
 package termi.termispring.mapper;
 
 import org.springframework.stereotype.Component;
+import termi.termispring.domain.Member;
 import termi.termispring.domain.Message;
 import termi.termispring.dto.MemberResponse;
 import termi.termispring.dto.MessageCreateRequest;
@@ -11,8 +12,8 @@ public class MessageMapperImpl implements MessageMapper{
     @Override
     public Message requestToMessage(MessageCreateRequest request) {
         Message message = new Message();
-        MemberResponse sender = new MemberResponse();
-        MemberResponse receiver = new MemberResponse();
+        Member sender = new Member();
+        Member receiver = new Member();
 
         sender.setId(request.getSenderId());
         receiver.setId(request.getReceiverId());

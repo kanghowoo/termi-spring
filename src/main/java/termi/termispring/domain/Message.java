@@ -7,8 +7,8 @@ import java.sql.Timestamp;
 public class Message {
 
     private Long id;
-    private MemberResponse sender;
-    private MemberResponse receiver;
+    private Member sender;
+    private Member receiver;
     private Timestamp sendTime;
     private String content;
 
@@ -36,19 +36,19 @@ public class Message {
         this.content = content;
     }
 
-    public MemberResponse getSender() {
+    public Member getSender() {
         return sender;
     }
 
-    public void setSender(MemberResponse sender) {
+    public void setSender(Member sender) {
         this.sender = sender;
     }
 
-    public MemberResponse getReceiver() {
+    public Member getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(MemberResponse receiver) {
+    public void setReceiver(Member receiver) {
         this.receiver = receiver;
     }
 }
