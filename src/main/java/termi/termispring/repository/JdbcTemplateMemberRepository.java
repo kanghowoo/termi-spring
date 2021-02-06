@@ -1,13 +1,16 @@
 package termi.termispring.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import termi.termispring.domain.Member;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class JdbcTemplateMemberRepository implements MemberRepository {
 
@@ -29,6 +32,25 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
         Number key = jdbcInsert.executeAndReturnKey(new
                 MapSqlParameterSource(parameters));
         member.setId(key.longValue());
+    }
+
+    @Override
+    public Optional<Member> findMemberByEmail(String email) {
+        List<Member> result = jdbcTemplate.query("select * from member where mem_email = ?", getMemberMapper(), email);
+        return result.stream().findAny();
+    }
+
+    private RowMapper<Member> getMemberMapper() {
+
+        return (rs, rowNum) -> {
+            Member member = new Member();
+            member.setId(rs.getLong("mem_id"));
+            member.setName(rs.getString("mem_name"));
+            member.setEmail(rs.getString("mem_email"));
+            member.setPassword(rs.getString("mem_password"));
+            member.setCreatedAt(rs.getTimestamp("mem_createdAt"));
+            return member;
+        };
     }
 
 }

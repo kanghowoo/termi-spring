@@ -29,7 +29,7 @@ public class MemberController {
         Member member = memberMapper.requestToMember(request);
         memberService.createMember(member);
 
-        Map result = new HashMap<String, String>();
+        Map<String,String> result = new HashMap<>();
         result.put("ok", request.getName());
         return result;
     }

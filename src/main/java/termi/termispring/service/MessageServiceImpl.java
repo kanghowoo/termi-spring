@@ -7,6 +7,7 @@ import termi.termispring.repository.MessageRepository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -20,7 +21,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     public void sendMessage(Message message) {
-        message.setSendTime(Timestamp.valueOf(LocalDateTime.now()));
+        message.setSendTime(Timestamp.valueOf(LocalDateTime.now().format(
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
         messageRepository.sendMessage(message);
     }
 
