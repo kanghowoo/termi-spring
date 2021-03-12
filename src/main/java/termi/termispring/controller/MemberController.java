@@ -1,6 +1,8 @@
 package termi.termispring.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +14,7 @@ import termi.termispring.service.MemberService;
 import java.util.HashMap;
 import java.util.Map;
 
+@CrossOrigin
 @RestController
 public class MemberController {
 
@@ -25,12 +28,13 @@ public class MemberController {
     }
 
     @PostMapping(value="/members")
-    public Map<String,String> createMember(@RequestBody MemberCreateRequest request) {
+    public ResponseEntity<?> createMember(@RequestBody MemberCreateRequest request) {
         Member member = memberMapper.requestToMember(request);
         memberService.createMember(member);
 
         Map<String,String> result = new HashMap<>();
-        result.put("ok", request.getName());
-        return result;
+        result.put("result", request.getName());
+
+        return ResponseEntity.ok(result);
     }
 }

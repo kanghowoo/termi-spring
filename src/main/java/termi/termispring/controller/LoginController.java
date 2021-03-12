@@ -2,6 +2,7 @@ package termi.termispring.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 public class LoginController {
     private final LoginService loginService;
@@ -32,7 +34,7 @@ public class LoginController {
 
         Map<String,String> result = new HashMap<>();
 
-        String tokenResult = loginService.checkPassword(request.getPassword(),member.get());
+        String tokenResult = loginService.checkPassword(request.getPassword(),member.orElse(null));
         result.put("result",tokenResult);
 
         return ResponseEntity.ok(result);
