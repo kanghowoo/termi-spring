@@ -22,7 +22,7 @@ public class LoginServiceImpl implements LoginService {
     public String checkPassword(String plainTextPassword,Member member) throws UnsupportedEncodingException {
 
         if (HashingBCrypt.checkpassword(plainTextPassword, member.getPassword())) {
-            String token = AccessTokenHelper.createToken(member.getEmail());
+            String token = AccessTokenHelper.createToken();
 
             AccessToken accessToken = new AccessToken();
             accessToken.setAccessToken(token);
