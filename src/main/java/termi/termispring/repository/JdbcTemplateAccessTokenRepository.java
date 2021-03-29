@@ -20,7 +20,7 @@ public class JdbcTemplateAccessTokenRepository implements AccessTokenRepository 
 
 
     @Override
-    public void createToken(AccessToken accessToken) throws UnsupportedEncodingException {
+    public void createToken(AccessToken accessToken) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("access_token").usingGeneratedKeyColumns("id");
         Map<String, Object> parameters = new HashMap<>();
@@ -34,6 +34,8 @@ public class JdbcTemplateAccessTokenRepository implements AccessTokenRepository 
 
     @Override
     public void updateToken(AccessToken accessToken) {
-        jdbcTemplate.update("update access_token set token = ? where mem_id = ?", accessToken.getAccessToken(),accessToken.getMemberId());
+        jdbcTemplate.update("update access_token set token = ? where mem_id = ?",
+                accessToken.getAccessToken(),accessToken.getMemberId());
+
     }
 }

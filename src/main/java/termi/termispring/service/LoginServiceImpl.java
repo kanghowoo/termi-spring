@@ -19,7 +19,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String checkPassword(String plainTextPassword,Member member) throws UnsupportedEncodingException {
+    public String checkPassword(String plainTextPassword,Member member) {
 
         if (HashingBCrypt.checkpassword(plainTextPassword, member.getPassword())) {
             String token = AccessTokenHelper.createToken();
