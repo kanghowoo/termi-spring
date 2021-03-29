@@ -31,4 +31,9 @@ public class JdbcTemplateAccessTokenRepository implements AccessTokenRepository 
                 MapSqlParameterSource(parameters));
         accessToken.setId(key.longValue());
     }
+
+    @Override
+    public void updateToken(AccessToken accessToken) {
+        jdbcTemplate.update("update access_token set token = ? where mem_id = ?", accessToken.getAccessToken(),accessToken.getMemberId());
+    }
 }

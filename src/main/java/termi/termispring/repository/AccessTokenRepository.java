@@ -6,4 +6,5 @@ import java.io.UnsupportedEncodingException;
 
 public interface AccessTokenRepository {
     void createToken(AccessToken accessToken) throws UnsupportedEncodingException;
+    void updateToken(AccessToken accessToken);
 }

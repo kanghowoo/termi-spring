@@ -27,7 +27,8 @@ public class LoginServiceImpl implements LoginService {
             AccessToken accessToken = new AccessToken();
             accessToken.setAccessToken(token);
             accessToken.setMemberId(member.getId());
-            accessTokenRepository.createToken(accessToken);
+            //accessTokenRepository.createToken(accessToken);
+            accessTokenRepository.updateToken(accessToken);
 
             return token;
 
