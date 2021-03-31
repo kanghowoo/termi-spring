@@ -39,7 +39,7 @@ public class MemberServiceImpl implements MemberService {
         AccessToken accessToken = new AccessToken();
         accessToken.setAccessToken(token);
         accessToken.setMemberId(member.getId());
-        accessTokenRepository.createToken(accessToken);
+
     }
 
     @Override
