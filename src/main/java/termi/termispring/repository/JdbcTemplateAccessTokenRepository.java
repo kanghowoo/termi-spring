@@ -21,21 +21,22 @@ public class JdbcTemplateAccessTokenRepository implements AccessTokenRepository 
 
     @Override
     public void createToken(AccessToken accessToken) {
-        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName("access_token").usingGeneratedKeyColumns("id");
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("token", accessToken.getAccessToken());
-        parameters.put("mem_id", accessToken.getMemberId());
-
-        Number key = jdbcInsert.executeAndReturnKey(new
-                MapSqlParameterSource(parameters));
-        accessToken.setId(key.longValue());
+//        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+//        jdbcInsert.withTableName("access_token").usingGeneratedKeyColumns("id");
+//        Map<String, Object> parameters = new HashMap<>();
+//        parameters.put("token", accessToken.getAccessToken());
+//        parameters.put("mem_id", accessToken.getMemberId());
+//
+//        Number key = jdbcInsert.executeAndReturnKey(new
+//                MapSqlParameterSource(parameters));
+//        accessToken.setId(key.longValue());
     }
 
     @Override
     public void updateToken(AccessToken accessToken) {
-        jdbcTemplate.update("update access_token set token = ? where mem_id = ?",
-                accessToken.getAccessToken(),accessToken.getMemberId());
 
+        jdbcTemplate.update("insert into access_token (id,mem_id,token)" +
+                        "values (null,?,?) on duplicate key update token = ?",
+                accessToken.getMemberId(),accessToken.getAccessToken(),accessToken.getAccessToken());
     }
 }
