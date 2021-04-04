@@ -1,15 +1,17 @@
 package termi.termispring.repository;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import termi.termispring.domain.AccessToken;
-import termi.termispring.util.AccessTokenHelper;
 
 import javax.sql.DataSource;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class JdbcTemplateAccessTokenRepository implements AccessTokenRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -37,6 +39,27 @@ public class JdbcTemplateAccessTokenRepository implements AccessTokenRepository 
 
         jdbcTemplate.update("update access_token set token = ? where mem_id = ?",
                 accessToken.getAccessToken(),accessToken.getMemberId());
+    }
+
+    @Override
+    public Optional<AccessToken> findAccessTokenByMemberId(Long memberId) {
+        List<AccessToken> result = jdbcTemplate.query("select * from access_token where mem_id = ?",
+        getAccessTokenMapper(), memberId);
+        return result.stream().findAny();
+
+    }
+
+
+    private RowMapper<AccessToken> getAccessTokenMapper() {
+
+        return (rs, rowNum) -> {
+            AccessToken accessToken = new AccessToken();
+            accessToken.setId(rs.getLong("id"));
+            accessToken.setMemberId(rs.getLong("mem_id"));
+            accessToken.setAccessToken(rs.getString("token"));
+
+            return accessToken;
+        };
     }
 
 }

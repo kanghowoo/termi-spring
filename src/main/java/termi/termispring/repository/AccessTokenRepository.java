@@ -2,9 +2,10 @@ package termi.termispring.repository;
 
 import termi.termispring.domain.AccessToken;
 
-import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 
 public interface AccessTokenRepository {
     void createToken(AccessToken accessToken);
     void updateToken(AccessToken accessToken);
+    Optional<AccessToken> findAccessTokenByMemberId(Long memberId);
 }

@@ -8,6 +8,7 @@ import termi.termispring.util.AccessTokenHelper;
 import termi.termispring.util.HashingBCrypt;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -22,14 +23,19 @@ public class LoginServiceImpl implements LoginService {
     public String checkPassword(String plainTextPassword,Member member) {
 
         if (HashingBCrypt.checkpassword(plainTextPassword, member.getPassword())) {
+
             String token = AccessTokenHelper.createToken();
+            AccessToken newToken = new AccessToken();
+            newToken.setAccessToken(token);
+            newToken.setMemberId(member.getId());
 
-            AccessToken accessToken = new AccessToken();
-            accessToken.setAccessToken(token);
-            accessToken.setMemberId(member.getId());
-            //accessTokenRepository.createToken(accessToken);
-            accessTokenRepository.updateToken(accessToken);
+            Optional<AccessToken> accessToken = accessTokenRepository.findAccessTokenByMemberId(member.getId());
 
+            if(accessToken != null) {
+                accessTokenRepository.updateToken(newToken);
+            } else{
+                accessTokenRepository.createToken(newToken);
+            }
             return token;
 
         } else {
