@@ -35,7 +35,7 @@ public class LoginController {
         Map<String,String> result = new HashMap<>();
 
         String tokenResult = loginService.checkPassword(request.getPassword(),member.orElse(null));
-        result.put("result",tokenResult);
+        result.put("token",tokenResult);
 
         return ResponseEntity.ok(result);
     }
