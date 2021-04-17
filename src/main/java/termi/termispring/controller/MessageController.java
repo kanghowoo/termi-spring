@@ -24,21 +24,21 @@ public class MessageController {
 
 
     @PostMapping(value = "/messages")
-    public MessageCreateRequest sendMessage(@RequestBody MessageCreateRequest request) {
+    public MessageCreateRequest sendMessage(@RequestHeader("Authorization") String token, @RequestBody MessageCreateRequest request) {
         Message message = messageMapper.requestToMessage(request);
         messageService.sendMessage(message);
         return request;
     }
 
     @GetMapping(value = "/users/{memberId}/messages")
-    public List getMessagesByUserId(@PathVariable Long memberId) {
+    public List getMessagesByUserId(@RequestHeader("Authorization") String token, @PathVariable Long memberId) {
         List<Message> messageList = messageService.getMessagesByUserId(memberId);
 //        model.addAttribute("message",messageList);
         return messageList;
     }
 
     @GetMapping(value = "/messages/{messageId}")
-    public MessageResponse getMessageByMessageId(@PathVariable Long messageId) {
+    public MessageResponse getMessageByMessageId(@RequestHeader("Authorization") String token, @PathVariable Long messageId) {
         Message message = messageService.getMessageByMessageId(messageId);
         MessageResponse response = messageMapper.messageToResponse(message);
         return response;
