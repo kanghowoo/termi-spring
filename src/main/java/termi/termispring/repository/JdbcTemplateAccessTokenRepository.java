@@ -44,9 +44,17 @@ public class JdbcTemplateAccessTokenRepository implements AccessTokenRepository 
     @Override
     public Optional<AccessToken> findAccessTokenByMemberId(Long memberId) {
         List<AccessToken> result = jdbcTemplate.query("select * from access_token where mem_id = ?",
-        getAccessTokenMapper(), memberId);
+                getAccessTokenMapper(), memberId);
         return result.stream().findAny();
 
+    }
+
+    @Override
+    public Optional<AccessToken> findAccessTokenByToken(String token) {
+        List<AccessToken> result = jdbcTemplate.query("select * from access_token where token = ?",
+                getAccessTokenMapper(), token);
+
+        return result.stream().findAny();
     }
 
 
